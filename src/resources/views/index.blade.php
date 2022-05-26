@@ -63,9 +63,6 @@
                         <td><span class="text-muted">{{ $item->id }}</span></td>
                         <td>{{ $item->name }}</td>
                         <td>
-                            @include('agenciafmd/admix::partials.label.star', ['star' => $item->star])
-                        </td>
-                        <td>
                             @livewire('admix::is-active', ['myModel' => get_class($item), 'myId' => $item->id])
                         </td>
                         @if(request()->is('*/trash'))
