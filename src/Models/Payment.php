@@ -1,10 +1,13 @@
 <?php
 
-namespace Agenciafmd\Pages\Models;
+namespace Agenciafmd\Payments\Models;
 
-use Agenciafmd\Pages\Database\Factories\PageFactory;
+use Agenciafmd\Participants\Models\Participant;
+use Agenciafmd\Payments\Database\Factories\PaymentFactory;
 use Agenciafmd\Media\Traits\MediaTrait;
 use Agenciafmd\Admix\Traits\TurboTrait;
+use Agenciafmd\Plans\Models\Plan;
+use Agenciafmd\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,12 +19,16 @@ use Spatie\MediaLibrary\Models\Media;
 use Spatie\Searchable\Searchable;
 use Spatie\Searchable\SearchResult;
 
-class Page extends Model implements AuditableContract, HasMedia, Searchable
+class Payment extends Model implements AuditableContract, HasMedia, Searchable
 {
     use SoftDeletes, HasFactory, Auditable, MediaTrait, TurboTrait;
 
     protected $guarded = [
         'media',
+    ];
+
+    protected $casts = [
+        'payment_date' => 'date',
     ];
 
     public $searchableType;
@@ -30,7 +37,7 @@ class Page extends Model implements AuditableContract, HasMedia, Searchable
     {
         parent::__construct($attributes);
 
-        $this->searchableType = config('admix-pages.name');
+        $this->searchableType = config('local-payments.name');
     }
 
     public function getSearchResult(): SearchResult
@@ -49,19 +56,29 @@ class Page extends Model implements AuditableContract, HasMedia, Searchable
 
     public function scopeSort($query)
     {
-        $sorts = default_sort(config('admix-pages.default_sort'));
+        $sorts = default_sort(config('local-payments.default_sort'));
 
         foreach ($sorts as $sort) {
             $query->orderBy($sort['field'], $sort['direction']);
         }
     }
 
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     protected static function newFactory()
     {
-        if (class_exists(\Database\Factories\PageFactory::class)) {
-            return \Database\Factories\PageFactory::new();
+        if (class_exists(\Database\Factories\PaymentFactory::class)) {
+            return \Database\Factories\PaymentFactory::new();
         }
 
-        return PageFactory::new();
+        return PaymentFactory::new();
     }
 }

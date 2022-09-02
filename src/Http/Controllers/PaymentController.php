@@ -1,22 +1,22 @@
 <?php
 
-namespace Agenciafmd\Pages\Http\Controllers;
+namespace Agenciafmd\Payments\Http\Controllers;
 
-use Agenciafmd\Pages\Models\Page;
-use Agenciafmd\Pages\Http\Requests\PageRequest;
+use Agenciafmd\Payments\Models\Payment;
+use Agenciafmd\Payments\Http\Requests\PaymentRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class PageController extends Controller
+class PaymentController extends Controller
 {
     public function index(Request $request)
     {
         session()->put('backUrl', request()->fullUrl());
 
-        $query = QueryBuilder::for(Page::class)
-            ->defaultSorts(config('admix-pages.default_sort'))
+        $query = QueryBuilder::for(Payment::class)
+            ->defaultSorts(config('local-payments.default_sort'))
             ->allowedSorts($request->sort)
             ->allowedFilters(array_merge((($request->filter) ? array_keys(array_diff_key($request->filter, array_flip(['id', 'is_active']))) : []), [
                 AllowedFilter::exact('id'),
@@ -29,102 +29,102 @@ class PageController extends Controller
 
         $view['items'] = $query->paginate($request->get('per_page', 50));
 
-        return view('agenciafmd/pages::index', $view);
+        return view('agenciafmd/payments::index', $view);
     }
 
-    public function create(Page $page)
+    public function create(Payment $payment)
     {
-        $view['model'] = $page;
+        $view['model'] = $payment;
 
-        return view('agenciafmd/pages::form', $view);
+        return view('agenciafmd/payments::form', $view);
     }
 
-    public function store(PageRequest $request)
+    public function store(PaymentRequest $request)
     {
-        if ($page = Page::create($request->validated())) {
+        if ($payment = Payment::create($request->validated())) {
             flash('Item inserido com sucesso.', 'success');
         } else {
             flash('Falha no cadastro.', 'danger');
         }
 
-        return ($url = session()->get('backUrl')) ? redirect($url) : redirect()->route('admix.pages.index');
+        return ($url = session()->get('backUrl')) ? redirect($url) : redirect()->route('admix.payments.index');
     }
 
-    public function show(Page $page)
+    public function show(Payment $payment)
     {
-        $view['model'] = $page;
+        $view['model'] = $payment;
 
-        return view('agenciafmd/pages::form', $view);
+        return view('agenciafmd/payments::form', $view);
     }
 
-    public function edit(Page $page)
+    public function edit(Payment $payment)
     {
-        $view['model'] = $page;
+        $view['model'] = $payment;
 
-        return view('agenciafmd/pages::form', $view);
+        return view('agenciafmd/payments::form', $view);
     }
 
-    public function update(Page $page, PageRequest $request)
+    public function update(Payment $payment, PaymentRequest $request)
     {
-        if ($page->update($request->validated())) {
+        if ($payment->update($request->validated())) {
             flash('Item atualizado com sucesso.', 'success');
         } else {
             flash('Falha na atualização.', 'danger');
         }
 
-        return ($url = session()->get('backUrl')) ? redirect($url) : redirect()->route('admix.pages.index');
+        return ($url = session()->get('backUrl')) ? redirect($url) : redirect()->route('admix.payments.index');
     }
 
-    public function destroy(Page $page)
+    public function destroy(Payment $payment)
     {
-        if ($page->delete()) {
+        if ($payment->delete()) {
             flash('Item removido com sucesso.', 'success');
         } else {
             flash('Falha na remoção.', 'danger');
         }
 
-        return ($url = session()->get('backUrl')) ? redirect($url) : redirect()->route('admix.pages.index');
+        return ($url = session()->get('backUrl')) ? redirect($url) : redirect()->route('admix.payments.index');
     }
 
     public function restore($id)
     {
-        $page = Page::onlyTrashed()
+        $payment = Payment::onlyTrashed()
             ->find($id);
 
-        if (!$page) {
+        if (!$payment) {
             flash('Item já restaurado.', 'danger');
-        } elseif ($page->restore()) {
+        } elseif ($payment->restore()) {
             flash('Item restaurado com sucesso.', 'success');
         } else {
             flash('Falha na restauração.', 'danger');
         }
 
-        return ($url = session()->get('backUrl')) ? redirect($url) : redirect()->route('admix.pages.index');
+        return ($url = session()->get('backUrl')) ? redirect($url) : redirect()->route('admix.payments.index');
     }
 
     public function batchDestroy(Request $request)
     {
-        if (Page::destroy($request->get('id', []))) {
+        if (Payment::destroy($request->get('id', []))) {
             flash('Item removido com sucesso.', 'success');
         } else {
             flash('Falha na remoção.', 'danger');
         }
 
-        return ($url = session()->get('backUrl')) ? redirect($url) : redirect()->route('admix.pages.index');
+        return ($url = session()->get('backUrl')) ? redirect($url) : redirect()->route('admix.payments.index');
     }
 
     public function batchRestore(Request $request)
     {
-        $page = Page::onlyTrashed()
+        $payment = Payment::onlyTrashed()
             ->whereIn('id', $request->get('id', []))
             ->restore();
 
-        if ($page) {
+        if ($payment) {
             flash('Item restaurado com sucesso.', 'success');
         } else {
             flash('Falha na restauração.', 'danger');
         }
 
-        return ($url = session()->get('backUrl')) ? redirect($url) : redirect()->route('admix.pages.index');
+        return ($url = session()->get('backUrl')) ? redirect($url) : redirect()->route('admix.payments.index');
     }
 }

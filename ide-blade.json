@@ -1,7 +1,7 @@
 {
     "namespaces": [
         {
-            "namespace": "agenciafmd/pages",
+            "namespace": "agenciafmd/payments",
             "path": "src/resources/views"
         }
     ]

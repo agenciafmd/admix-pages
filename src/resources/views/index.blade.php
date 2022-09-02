@@ -1,35 +1,35 @@
 @extends('agenciafmd/admix::partials.crud.index', [
-    'route' => (request()->is('*/trash') ? route('admix.pages.trash') : route('admix.pages.index'))
+    'route' => (request()->is('*/trash') ? route('admix.payments.trash') : route('admix.payments.index'))
 ])
 
 @section('title')
     @if(request()->is('*/trash'))
         Lixeira de
     @endif
-    {{ config('admix-pages.name') }}
+    {{ config('local-payments.name') }}
 @endsection
 
 @section('actions')
     @if(request()->is('*/trash'))
-        @include('agenciafmd/admix::partials.btn.back', ['url' => route('admix.pages.index')])
+        @include('agenciafmd/admix::partials.btn.back', ['url' => route('admix.payments.index')])
     @else
-        @can('create', \Agenciafmd\Pages\Models\Page::class)
-            @include('agenciafmd/admix::partials.btn.create', ['url' => route('admix.pages.create'), 'label' => config('admix-pages.name')])
+        @can('create', \Agenciafmd\Payments\Models\Payment::class)
+            @include('agenciafmd/admix::partials.btn.create', ['url' => route('admix.payments.create'), 'label' => config('local-payments.name')])
         @endcan
-        @can('restore', \Agenciafmd\Pages\Models\Page::class)
-            @include('agenciafmd/admix::partials.btn.trash', ['url' => route('admix.pages.trash')])
+        @can('restore', \Agenciafmd\Payments\Models\Payment::class)
+            @include('agenciafmd/admix::partials.btn.trash', ['url' => route('admix.payments.trash')])
         @endcan
     @endif
 @endsection
 
 @section('batch')
     @if(request()->is('*/trash'))
-        @can('restore', \Agenciafmd\Pages\Models\Page::class)
-            {{ Form::select('batch', ['' => 'com os selecionados', route('admix.pages.batchRestore') => '- restaurar'], null, ['class' => 'js-batch-select form-control custom-select']) }}
+        @can('restore', \Agenciafmd\Payments\Models\Payment::class)
+            {{ Form::select('batch', ['' => 'com os selecionados', route('admix.payments.batchRestore') => '- restaurar'], null, ['class' => 'js-batch-select form-control custom-select']) }}
         @endcan
     @else
-        @can('delete', \Agenciafmd\Pages\Models\Page::class)
-            {{ Form::select('batch', ['' => 'com os selecionados', route('admix.pages.batchDestroy') => '- remover'], null, ['class' => 'js-batch-select form-control custom-select']) }}
+        @can('delete', \Agenciafmd\Payments\Models\Payment::class)
+            {{ Form::select('batch', ['' => 'com os selecionados', route('admix.payments.batchDestroy') => '- remover'], null, ['class' => 'js-batch-select form-control custom-select']) }}
         @endcan
     @endif
 @endsection
@@ -45,7 +45,11 @@
                 <tr>
                     <th class="w-1 d-none d-md-table-cell">&nbsp;</th>
                     <th class="w-1">{!! column_sort('#', 'id') !!}</th>
-                    <th>{!! column_sort('Nome', 'name') !!}</th>
+                    <th>{!! column_sort('Usuário', 'user_id') !!}</th>
+                    <th>{!! column_sort('Plano', 'plan_id') !!}</th>
+                    <th>{!! column_sort('Status', 'status') !!}</th>
+                    <th>{!! column_sort('Valor', 'value') !!}</th>
+                    <th>{!! column_sort('Data Pagamento', 'payment_date') !!}</th>
                     <th class="w-1">{!! column_sort('Ativo', 'is_active') !!}</th>
                     <th></th>
                 </tr>
@@ -61,13 +65,17 @@
                             </label>
                         </td>
                         <td><span class="text-muted">{{ $item->id }}</span></td>
-                        <td>{{ $item->name }}</td>
+                        <td>{{ $item->user->name }}</td>
+                        <td>{{ $item->plan->name }}</td>
+                        <td>{{ $item->status }}</td>
+                        <td>{{ $item->value }}</td>
+                        <td>{{ ($item->payment_date) ? \Carbon\Carbon::parse($item->payment_date)->format('d/m/Y h:i:s') : '' }}</td>
                         <td>
                             @livewire('admix::is-active', ['myModel' => get_class($item), 'myId' => $item->id])
                         </td>
                         @if(request()->is('*/trash'))
                             <td class="w-1 text-right">
-                                @include('agenciafmd/admix::partials.btn.restore', ['url' => route('admix.pages.restore', $item->id)])
+                                @include('agenciafmd/admix::partials.btn.restore', ['url' => route('admix.payments.restore', $item->id)])
                             </td>
                         @else
                             <td class="w-1 text-center">
@@ -76,11 +84,11 @@
                                         <i class="icon fe-more-vertical text-muted"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        @can('update', \Agenciafmd\Pages\Models\Page::class)
-                                            @include('agenciafmd/admix::partials.btn.edit', ['url' => route('admix.pages.edit', $item->id)])
+                                        @can('update', \Agenciafmd\Payments\Models\Payment::class)
+                                            @include('agenciafmd/admix::partials.btn.edit', ['url' => route('admix.payments.edit', $item->id)])
                                         @endcan
-                                        @can('delete', \Agenciafmd\Pages\Models\Page::class)
-                                            @include('agenciafmd/admix::partials.btn.remove', ['url' => route('admix.pages.destroy', $item->id)])
+                                        @can('delete', \Agenciafmd\Payments\Models\Payment::class)
+                                            @include('agenciafmd/admix::partials.btn.remove', ['url' => route('admix.payments.destroy', $item->id)])
                                         @endcan
                                     </div>
                                 </div>
@@ -91,7 +99,7 @@
                 </tbody>
             </table>
         </div>
-        {!! $items->appends(request()->except(['page']))->links() !!}
+        {!! $items->appends(request()->except(['payment']))->links() !!}
     @else
         @include('agenciafmd/admix::partials.info.not-found')
     @endif

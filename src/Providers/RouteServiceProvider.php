@@ -1,6 +1,6 @@
 <?php
 
-namespace Agenciafmd\Pages\Providers;
+namespace Agenciafmd\Payments\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;

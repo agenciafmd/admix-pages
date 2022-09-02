@@ -1,35 +1,35 @@
 <?php
 
-use Agenciafmd\Pages\Http\Controllers\PageController;
-use Agenciafmd\Pages\Models\Page;
+use Agenciafmd\Payments\Http\Controllers\PaymentController;
+use Agenciafmd\Payments\Models\Payment;
 
-Route::get('pages', [PageController::class, 'index'])
-    ->name('admix.pages.index')
-    ->middleware('can:view,' . Page::class);
-Route::get('pages/trash', [PageController::class, 'index'])
-    ->name('admix.pages.trash')
-    ->middleware('can:restore,' . Page::class);
-Route::get('pages/create', [PageController::class, 'create'])
-    ->name('admix.pages.create')
-    ->middleware('can:create,' . Page::class);
-Route::post('pages', [PageController::class, 'store'])
-    ->name('admix.pages.store')
-    ->middleware('can:create,' . Page::class);
-Route::get('pages/{page}/edit', [PageController::class, 'edit'])
-    ->name('admix.pages.edit')
-    ->middleware('can:update,' . Page::class);
-Route::put('pages/{page}', [PageController::class, 'update'])
-    ->name('admix.pages.update')
-    ->middleware('can:update,' . Page::class);
-Route::delete('pages/destroy/{page}', [PageController::class, 'destroy'])
-    ->name('admix.pages.destroy')
-    ->middleware('can:delete,' . Page::class);
-Route::post('pages/{id}/restore', [PageController::class, 'restore'])
-    ->name('admix.pages.restore')
-    ->middleware('can:restore,' . Page::class);
-Route::post('pages/batchDestroy', [PageController::class, 'batchDestroy'])
-    ->name('admix.pages.batchDestroy')
-    ->middleware('can:delete,' . Page::class);
-Route::post('pages/batchRestore', [PageController::class, 'batchRestore'])
-    ->name('admix.pages.batchRestore')
-    ->middleware('can:restore,' . Page::class);
+Route::get('payments', [PaymentController::class, 'index'])
+    ->name('admix.payments.index')
+    ->middleware('can:view,' . Payment::class);
+Route::get('payments/trash', [PaymentController::class, 'index'])
+    ->name('admix.payments.trash')
+    ->middleware('can:restore,' . Payment::class);
+Route::get('payments/create', [PaymentController::class, 'create'])
+    ->name('admix.payments.create')
+    ->middleware('can:create,' . Payment::class);
+Route::post('payments', [PaymentController::class, 'store'])
+    ->name('admix.payments.store')
+    ->middleware('can:create,' . Payment::class);
+Route::get('payments/{payment}/edit', [PaymentController::class, 'edit'])
+    ->name('admix.payments.edit')
+    ->middleware('can:update,' . Payment::class);
+Route::put('payments/{payment}', [PaymentController::class, 'update'])
+    ->name('admix.payments.update')
+    ->middleware('can:update,' . Payment::class);
+Route::delete('payments/destroy/{payment}', [PaymentController::class, 'destroy'])
+    ->name('admix.payments.destroy')
+    ->middleware('can:delete,' . Payment::class);
+Route::post('payments/{id}/restore', [PaymentController::class, 'restore'])
+    ->name('admix.payments.restore')
+    ->middleware('can:restore,' . Payment::class);
+Route::post('payments/batchDestroy', [PaymentController::class, 'batchDestroy'])
+    ->name('admix.payments.batchDestroy')
+    ->middleware('can:delete,' . Payment::class);
+Route::post('payments/batchRestore', [PaymentController::class, 'batchRestore'])
+    ->name('admix.payments.batchRestore')
+    ->middleware('can:restore,' . Payment::class);
