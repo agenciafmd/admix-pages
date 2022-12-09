@@ -1,7 +1,7 @@
 {
-    "name": "agenciafmd/local-payments",
-    "description": "Pagamentos - Agência F&MD",
-    "homepage": "",
+    "name": "agenciafmd/admix-pages",
+    "description": "Páginas - Agência F&MD",
+    "homepage": "https://github.com/agenciafmd/admix-pages",
     "license": "MIT",
     "authors": [
         {
@@ -19,13 +19,13 @@
             "src/Http/helpers.php"
         ],
         "psr-4": {
-            "Agenciafmd\\Payments\\": "src/"
+            "Agenciafmd\\Pages\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Agenciafmd\\Payments\\Providers\\PaymentServiceProvider"
+                "Agenciafmd\\Pages\\Providers\\PageServiceProvider"
             ]
         }
     }

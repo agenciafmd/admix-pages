@@ -1,6 +1,6 @@
 <?php
 
-namespace Agenciafmd\Payments\Providers;
+namespace Agenciafmd\Pages\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -26,14 +26,14 @@ class BladeServiceProvider extends ServiceProvider
     {
         $this->app->make('admix-menu')
             ->push((object)[
-                'view' => 'agenciafmd/payments::partials.menus.item',
-                'ord' => config('local-payments.sort', 1),
+                'view' => 'agenciafmd/pages::partials.menus.item',
+                'ord' => config('admix-pages.sort', 1),
             ]);
     }
 
     protected function loadViews()
     {
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'agenciafmd/payments');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'agenciafmd/pages');
     }
 
     protected function loadTranslations()
@@ -44,7 +44,7 @@ class BladeServiceProvider extends ServiceProvider
     protected function publish()
     {
         $this->publishes([
-            __DIR__ . '/../resources/views' => base_path('resources/views/vendor/agenciafmd/payments'),
-        ], 'local-payments:views');
+            __DIR__ . '/../resources/views' => base_path('resources/views/vendor/agenciafmd/pages'),
+        ], 'admix-pages:views');
     }
 }

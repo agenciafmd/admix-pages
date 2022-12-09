@@ -1,15 +1,15 @@
 <?php
 
-namespace Agenciafmd\Payments\Providers;
+namespace Agenciafmd\Pages\Providers;
 
-use Agenciafmd\Payments\Models\Payment;
-use Agenciafmd\Payments\Policies\PaymentPolicy;
+use Agenciafmd\Pages\Models\Page;
+use Agenciafmd\Pages\Policies\PagePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
     protected $policies = [
-        Payment::class => PaymentPolicy::class,
+        Page::class => PagePolicy::class,
     ];
 
     public function boot()

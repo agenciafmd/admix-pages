@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'payment' => [
+    'page' => [
 //        'image' => [ //nome do campo
 //            'label' => 'imagem', //label do campo
 //            'multiple' => false, //se permite o upload multiplo

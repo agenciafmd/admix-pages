@@ -2,8 +2,8 @@
 
 return [
     [
-        'name' => config('local-payments.name'),
-        'policy' => '\Agenciafmd\Payments\Policies\PaymentPolicy',
+        'name' => config('admix-pages.name'),
+        'policy' => '\Agenciafmd\Pages\Policies\PagePolicy',
         'abilities' => [
             [
                 'name' => 'visualizar',

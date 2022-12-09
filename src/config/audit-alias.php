@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'Agenciafmd\Payments\Models\Payment' => config('local-payments.name'),
+    'Agenciafmd\Pages\Models\Page' => config('admix-pages.name'),
 ];

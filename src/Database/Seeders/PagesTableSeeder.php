@@ -1,20 +1,20 @@
 <?php
 
-namespace Agenciafmd\Payments\Database\Seeders;
+namespace Agenciafmd\Pages\Database\Seeders;
 
-use Agenciafmd\Payments\Models\Payment;
+use Agenciafmd\Pages\Models\Page;
 use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Illuminate\Http\File as HttpFile;
 use Illuminate\Support\Facades\Storage;
 
-class PaymentsTableSeeder extends Seeder
+class PagesTableSeeder extends Seeder
 {
     protected int $total = 20;
 
     public function run()
     {
-        Payment::query()
+        Page::query()
             ->truncate();
 
         $this->command->getOutput()
@@ -22,12 +22,12 @@ class PaymentsTableSeeder extends Seeder
 
         $faker = Factory::create('pt_BR');
 
-        Payment::factory($this->total)
+        Page::factory($this->total)
             ->create()
-            ->each(function ($payment) use ($faker) {
+            ->each(function ($page) use ($faker) {
 
-                foreach (config('upload-configs.payment') as $key => $image) {
-                    $fakerDir = __DIR__ . '/../Faker/payments/' . $key;
+                foreach (config('upload-configs.page') as $key => $image) {
+                    $fakerDir = __DIR__ . '/../Faker/pages/' . $key;
 
                     if ($image['faker_dir']) {
                         $fakerDir = $image['faker_dir'];
@@ -39,17 +39,17 @@ class PaymentsTableSeeder extends Seeder
                             $sourceFile = $faker->file($fakerDir, storage_path('admix/tmp'));
                             $targetFile = Storage::putFile('tmp', new HttpFile($sourceFile));
 
-                            $payment->doUploadMultiple($targetFile, $key);
+                            $page->doUploadMultiple($targetFile, $key);
                         }
                     } else {
                         $sourceFile = $faker->file($fakerDir, storage_path('admix/tmp'));
                         $targetFile = Storage::putFile('tmp', new HttpFile($sourceFile));
 
-                        $payment->doUpload($targetFile, $key);
+                        $page->doUpload($targetFile, $key);
                     }
                 }
 
-                $payment->save();
+                $page->save();
 
                 $this->command->getOutput()
                     ->progressAdvance();
