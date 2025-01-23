@@ -12,7 +12,7 @@ class AuthServiceProvider extends ServiceProvider
         Page::class => PagePolicy::class,
     ];
 
-    public function boot()
+    public function boot(): void
     {
         $this->registerPolicies();
     }

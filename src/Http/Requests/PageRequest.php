@@ -8,9 +8,9 @@ class PageRequest extends FormRequest
 {
     protected $errorBag = 'admix';
 
-    public function rules()
+    public function rules(): array
     {
-        $rules = [
+        return [
             'is_active' => [
                 'required',
                 'boolean',
@@ -23,11 +23,9 @@ class PageRequest extends FormRequest
                 'required',
             ],
         ];
-
-        return $rules;
     }
 
-    public function attributes()
+    public function attributes(): array
     {
         return [
             'is_active' => 'ativo',
@@ -36,7 +34,7 @@ class PageRequest extends FormRequest
         ];
     }
 
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }

@@ -2,6 +2,7 @@
 
 use Agenciafmd\Pages\Http\Controllers\PageController;
 use Agenciafmd\Pages\Models\Page;
+use Illuminate\Support\Facades\Route;
 
 Route::get('pages', [PageController::class, 'index'])
     ->name('admix.pages.index')

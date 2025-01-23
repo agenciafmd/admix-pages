@@ -12,7 +12,7 @@ class PagesTableSeeder extends Seeder
 {
     protected int $total = 20;
 
-    public function run()
+    public function run(): void
     {
         Page::query()
             ->truncate();

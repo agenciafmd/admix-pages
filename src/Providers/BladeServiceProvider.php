@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 
 class BladeServiceProvider extends ServiceProvider
 {
-    public function boot()
+    public function boot(): void
     {
         $this->setMenu();
 
@@ -17,31 +17,31 @@ class BladeServiceProvider extends ServiceProvider
         $this->publish();
     }
 
-    public function register()
+    public function register(): void
     {
         //
     }
 
-    protected function setMenu()
+    protected function setMenu(): void
     {
         $this->app->make('admix-menu')
-            ->push((object)[
+            ->push((object) [
                 'view' => 'agenciafmd/pages::partials.menus.item',
                 'ord' => config('admix-pages.sort', 1),
             ]);
     }
 
-    protected function loadViews()
+    protected function loadViews(): void
     {
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'agenciafmd/pages');
     }
 
-    protected function loadTranslations()
+    protected function loadTranslations(): void
     {
         $this->loadJsonTranslationsFrom(__DIR__ . '/../resources/lang');
     }
 
-    protected function publish()
+    protected function publish(): void
     {
         $this->publishes([
             __DIR__ . '/../resources/views' => base_path('resources/views/vendor/agenciafmd/pages'),

@@ -5,13 +5,15 @@ namespace Agenciafmd\Pages\Http\Controllers;
 use Agenciafmd\Pages\Models\Page;
 use Agenciafmd\Pages\Http\Requests\PageRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class PageController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         session()->put('backUrl', request()->fullUrl());
 
@@ -32,14 +34,14 @@ class PageController extends Controller
         return view('agenciafmd/pages::index', $view);
     }
 
-    public function create(Page $page)
+    public function create(Page $page): View
     {
         $view['model'] = $page;
 
         return view('agenciafmd/pages::form', $view);
     }
 
-    public function store(PageRequest $request)
+    public function store(PageRequest $request): RedirectResponse
     {
         if ($page = Page::create($request->validated())) {
             flash('Item inserido com sucesso.', 'success');
@@ -50,21 +52,21 @@ class PageController extends Controller
         return ($url = session()->get('backUrl')) ? redirect($url) : redirect()->route('admix.pages.index');
     }
 
-    public function show(Page $page)
+    public function show(Page $page): View
     {
         $view['model'] = $page;
 
         return view('agenciafmd/pages::form', $view);
     }
 
-    public function edit(Page $page)
+    public function edit(Page $page): View
     {
         $view['model'] = $page;
 
         return view('agenciafmd/pages::form', $view);
     }
 
-    public function update(Page $page, PageRequest $request)
+    public function update(Page $page, PageRequest $request): RedirectResponse
     {
         if ($page->update($request->validated())) {
             flash('Item atualizado com sucesso.', 'success');
@@ -75,7 +77,7 @@ class PageController extends Controller
         return ($url = session()->get('backUrl')) ? redirect($url) : redirect()->route('admix.pages.index');
     }
 
-    public function destroy(Page $page)
+    public function destroy(Page $page): RedirectResponse
     {
         if ($page->delete()) {
             flash('Item removido com sucesso.', 'success');
@@ -86,7 +88,7 @@ class PageController extends Controller
         return ($url = session()->get('backUrl')) ? redirect($url) : redirect()->route('admix.pages.index');
     }
 
-    public function restore($id)
+    public function restore($id): RedirectResponse
     {
         $page = Page::onlyTrashed()
             ->find($id);
@@ -102,7 +104,7 @@ class PageController extends Controller
         return ($url = session()->get('backUrl')) ? redirect($url) : redirect()->route('admix.pages.index');
     }
 
-    public function batchDestroy(Request $request)
+    public function batchDestroy(Request $request): RedirectResponse
     {
         if (Page::destroy($request->get('id', []))) {
             flash('Item removido com sucesso.', 'success');
@@ -113,7 +115,7 @@ class PageController extends Controller
         return ($url = session()->get('backUrl')) ? redirect($url) : redirect()->route('admix.pages.index');
     }
 
-    public function batchRestore(Request $request)
+    public function batchRestore(Request $request): RedirectResponse
     {
         $page = Page::onlyTrashed()
             ->whereIn('id', $request->get('id', []))

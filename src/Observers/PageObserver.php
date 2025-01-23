@@ -9,12 +9,12 @@ use Illuminate\Support\Str;
 
 class PageObserver
 {
-    public function saving(Page $model)
+    public function saving(Page $model): void
     {
         $model->slug = Str::slug($model->name);
     }
 
-    public function saved(Page $model)
+    public function saved(Page $model): void
     {
         if (!app()->runningInConsole()) {
 

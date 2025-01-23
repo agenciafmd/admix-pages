@@ -8,7 +8,6 @@ use Agenciafmd\Admix\Traits\TurboTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Carbon;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Spatie\MediaLibrary\HasMedia;
@@ -42,12 +41,12 @@ class Page extends Model implements AuditableContract, HasMedia, Searchable
         );
     }
 
-    public function scopeIsActive($query)
+    public function scopeIsActive($query): void
     {
         $query->where('is_active', 1);
     }
 
-    public function scopeSort($query)
+    public function scopeSort($query): void
     {
         $sorts = default_sort(config('admix-pages.default_sort'));
 
@@ -56,7 +55,7 @@ class Page extends Model implements AuditableContract, HasMedia, Searchable
         }
     }
 
-    protected static function newFactory()
+    protected static function newFactory(): PageFactory|\Database\Factories\PageFactory
     {
         if (class_exists(\Database\Factories\PageFactory::class)) {
             return \Database\Factories\PageFactory::new();

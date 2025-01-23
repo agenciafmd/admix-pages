@@ -9,7 +9,7 @@ use Illuminate\Support\ServiceProvider;
 
 class PageServiceProvider extends ServiceProvider
 {
-    public function boot()
+    public function boot(): void
     {
         $this->providers();
 
@@ -22,35 +22,35 @@ class PageServiceProvider extends ServiceProvider
         $this->publish();
     }
 
-    public function register()
+    public function register(): void
     {
         $this->loadConfigs();
     }
 
-    protected function providers()
+    protected function providers(): void
     {
         $this->app->register(AuthServiceProvider::class);
         $this->app->register(BladeServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
     }
 
-    protected function setObservers()
+    protected function setObservers(): void
     {
         Page::observe(PageObserver::class);
     }
 
-    protected function setSearch()
+    protected function setSearch(): void
     {
         $this->app->make('admix-search')
             ->registerModel(Page::class, 'name');
     }
 
-    protected function loadMigrations()
+    protected function loadMigrations(): void
     {
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
 
-    protected function publish()
+    protected function publish(): void
     {
         $this->publishes([
             __DIR__ . '/../config/admix-pages.php' => config_path('admix-pages.php'),
@@ -65,7 +65,7 @@ class PageServiceProvider extends ServiceProvider
         $this->publishes($factoriesAndSeeders, 'admix-pages:seeders');
     }
 
-    protected function loadConfigs()
+    protected function loadConfigs(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/admix-pages.php', 'admix-pages');
         $this->mergeConfigFrom(__DIR__ . '/../config/gate.php', 'gate');
