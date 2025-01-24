@@ -8,7 +8,7 @@
 ## Instalação
 
 ```bash
-composer require agenciafmd/admix-pages:dev-master
+composer require agenciafmd/admix-pages:v8.x-dev
 ```
 
 Execute a migração
