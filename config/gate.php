@@ -1,31 +1,33 @@
 <?php
 
+use Agenciafmd\Pages\Policies\PagePolicy;
+
 return [
     [
         'name' => config('admix-pages.name'),
-        'policy' => '\Agenciafmd\Pages\Policies\PagePolicy',
+        'policy' => PagePolicy::class,
         'abilities' => [
             [
-                'name' => 'visualizar',
+                'name' => 'View',
                 'method' => 'view',
             ],
             [
-                'name' => 'criar',
+                'name' => 'Create',
                 'method' => 'create',
             ],
             [
-                'name' => 'atualizar',
+                'name' => 'Update',
                 'method' => 'update',
             ],
             [
-                'name' => 'deletar',
+                'name' => 'Delete',
                 'method' => 'delete',
             ],
             [
-                'name' => 'restaurar',
+                'name' => 'Restore',
                 'method' => 'restore',
             ],
         ],
-        'sort' => 10,
+        'sort' => 100,
     ],
 ];

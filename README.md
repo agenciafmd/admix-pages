@@ -8,7 +8,7 @@
 ## Instalação
 
 ```bash
-composer require agenciafmd/admix-pages:dev-master
+composer require agenciafmd/admix-pages:v11.x-dev
 ```
 
 Execute a migração
@@ -34,13 +34,8 @@ Por padrão, as configurações do pacote são:
 
 return [
     'name' => 'Páginas',
-    'icon' => 'icon fe-file-text',
-    'sort' => 20,
-    'default_sort' => [
-        '-is_active',
-        'name',
-    ],
-    'wysiwyg' => true,
+    'icon' => 'file-text',
+    'sort' => 100,
 ];
 ```
 

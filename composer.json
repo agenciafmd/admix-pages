@@ -1,8 +1,6 @@
 {
     "name": "agenciafmd/admix-pages",
-    "description": "Páginas - Agência F&MD",
-    "homepage": "https://github.com/agenciafmd/admix-pages",
-    "license": "MIT",
+    "description": "Gerenciador de páginas básico",
     "authors": [
         {
             "name": "Carlos Seiji",
@@ -12,14 +10,13 @@
         }
     ],
     "require": {
-        "laravel/framework": "8.*"
+        "laravel/framework": "11.*"
     },
     "autoload": {
-        "files": [
-            "src/Http/helpers.php"
-        ],
         "psr-4": {
-            "Agenciafmd\\Pages\\": "src/"
+            "Agenciafmd\\Pages\\": "src/",
+            "Agenciafmd\\Pages\\Database\\Factories\\": "database/factories/",
+            "Agenciafmd\\Pages\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "extra": {
@@ -28,5 +25,8 @@
                 "Agenciafmd\\Pages\\Providers\\PageServiceProvider"
             ]
         }
+    },
+    "config": {
+        "sort-packages": true
     }
 }

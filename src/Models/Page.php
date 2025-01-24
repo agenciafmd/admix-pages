@@ -2,57 +2,37 @@
 
 namespace Agenciafmd\Pages\Models;
 
+use Agenciafmd\Admix\Traits\WithScopes;
+use Agenciafmd\Admix\Traits\WithSlug;
 use Agenciafmd\Pages\Database\Factories\PageFactory;
-use Agenciafmd\Media\Traits\MediaTrait;
-use Agenciafmd\Admix\Traits\TurboTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\Models\Media;
-use Spatie\Searchable\Searchable;
-use Spatie\Searchable\SearchResult;
 
-class Page extends Model implements AuditableContract, HasMedia, Searchable
+class Page extends Model implements AuditableContract
 {
-    use SoftDeletes, HasFactory, Auditable, MediaTrait, TurboTrait;
+    use Auditable, HasFactory, Prunable, SoftDeletes, WithScopes, WithSlug;
 
     protected $guarded = [
-        'media',
+        //
     ];
 
-    public $searchableType;
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
 
-    public function __construct(array $attributes = [])
+    protected array $defaultSort = [
+        'is_active' => 'desc',
+        'name' => 'asc',
+    ];
+
+    public function prunable(): Builder
     {
-        parent::__construct($attributes);
-
-        $this->searchableType = config('admix-pages.name');
-    }
-
-    public function getSearchResult(): SearchResult
-    {
-        return new SearchResult(
-            $this,
-            "{$this->name}",
-            route('admix.pages.edit', $this->id)
-        );
-    }
-
-    public function scopeIsActive($query): void
-    {
-        $query->where('is_active', 1);
-    }
-
-    public function scopeSort($query): void
-    {
-        $sorts = default_sort(config('admix-pages.default_sort'));
-
-        foreach ($sorts as $sort) {
-            $query->orderBy($sort['field'], $sort['direction']);
-        }
+        return self::where('deleted_at', '<=', now()->subYear());
     }
 
     protected static function newFactory(): PageFactory|\Database\Factories\PageFactory

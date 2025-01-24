@@ -3,7 +3,6 @@
 namespace Agenciafmd\Pages\Providers;
 
 use Agenciafmd\Pages\Models\Page;
-use Agenciafmd\Pages\Models\Category;
 use Agenciafmd\Pages\Observers\PageObserver;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,9 +14,9 @@ class PageServiceProvider extends ServiceProvider
 
         $this->setObservers();
 
-        $this->setSearch();
-
         $this->loadMigrations();
+
+        $this->loadTranslations();
 
         $this->publish();
     }
@@ -27,49 +26,49 @@ class PageServiceProvider extends ServiceProvider
         $this->loadConfigs();
     }
 
-    protected function providers(): void
+    private function providers(): void
     {
-        $this->app->register(AuthServiceProvider::class);
         $this->app->register(BladeServiceProvider::class);
+        $this->app->register(CommandServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
+        $this->app->register(AuthServiceProvider::class);
+        $this->app->register(LivewireServiceProvider::class);
     }
 
-    protected function setObservers(): void
+    private function publish(): void
+    {
+        $this->publishes([
+            __DIR__ . '/../../config/admix-pages.php' => base_path('config/admix-pages.php'),
+        ], 'admix-pages:configs');
+
+        $this->publishes([
+            __DIR__ . '/../../database/seeders/PageTableSeeder.php' => base_path('database/seeders/PageTableSeeder.php'),
+        ], 'admix-pages:seeders');
+
+        $this->publishes([
+            __DIR__ . '/../../lang/pt_BR' => lang_path('pt_BR'),
+        ], ['admix-pages:translations', 'admix-translations']);
+    }
+
+    private function setObservers(): void
     {
         Page::observe(PageObserver::class);
     }
 
-    protected function setSearch(): void
+    private function loadMigrations(): void
     {
-        $this->app->make('admix-search')
-            ->registerModel(Page::class, 'name');
+        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
     }
 
-    protected function loadMigrations(): void
+    private function loadTranslations(): void
     {
-        $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
+        $this->loadTranslationsFrom(__DIR__ . '/../../lang', 'admix-pages');
+        $this->loadJsonTranslationsFrom(__DIR__ . '/../../lang');
     }
 
-    protected function publish(): void
+    private function loadConfigs(): void
     {
-        $this->publishes([
-            __DIR__ . '/../config/admix-pages.php' => config_path('admix-pages.php'),
-            __DIR__ . '/../config/upload-configs.php' => config_path('upload-configs.php'),
-        ], 'admix-pages:configs');
-
-
-        $factoriesAndSeeders[__DIR__ . '/../Database/Factories/PageFactory.php'] = base_path('database/factories/PageFactory.php');
-        $factoriesAndSeeders[__DIR__ . '/../Database/Seeders/PagesTableSeeder.php'] = base_path('database/seeders/PagesTableSeeder.php');
-        $factoriesAndSeeders[__DIR__ . '/../Database/Faker/pages/image'] = base_path('database/faker/pages/image');
-
-        $this->publishes($factoriesAndSeeders, 'admix-pages:seeders');
-    }
-
-    protected function loadConfigs(): void
-    {
-        $this->mergeConfigFrom(__DIR__ . '/../config/admix-pages.php', 'admix-pages');
-        $this->mergeConfigFrom(__DIR__ . '/../config/gate.php', 'gate');
-        $this->mergeConfigFrom(__DIR__ . '/../config/audit-alias.php', 'audit-alias');
-        $this->mergeConfigFrom(__DIR__ . '/../config/upload-configs.php', 'upload-configs');
+        $this->mergeConfigFrom(__DIR__ . '/../../config/admix-pages.php', 'admix-pages');
+        $this->mergeConfigFrom(__DIR__ . '/../../config/audit-alias.php', 'audit-alias');
     }
 }

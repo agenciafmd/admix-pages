@@ -14,8 +14,8 @@ class PageFactory extends Factory
         return [
             'is_active' => $this->faker->optional(0.3, 1)
                 ->randomElement([0]),
-            'name' => $this->faker->sentence(),
-            'description' => config('admix-pages.wysiwyg') ? '<p>' . collect($this->faker->paragraphs(5, false))->implode('</p><p>') . '</p>' : $this->faker->paragraphs(5, true),
+            'name' => $this->faker->sentence(3),
+            'description' => $this->faker->paragraphs(5, true),
         ];
     }
 }
